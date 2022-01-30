@@ -1,8 +1,8 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from '../assets/logo.svg'
+import '../styles/App.css'
+import { Outlet, Link } from 'react-router-dom'
 
-function App() {
+const Top = () => {
   return (
     <div className="App">
       <header className="App-header">
@@ -18,9 +18,19 @@ function App() {
         >
           Learn React
         </a>
+        <Link to="login" className="App-link">
+          Go To Login
+        </Link>
+        <Link to="signIn" className="App-link">
+          Go To signIn
+        </Link>
+        <Link to="signOut" className="App-link">
+          Go To signOut
+        </Link>
+        <Outlet />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default Top
