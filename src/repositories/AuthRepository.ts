@@ -60,6 +60,7 @@ export const createSession = (user: SignInUser, onSuccess: () => void) => {
     .then((userCredential) => {
       const user = userCredential.user
       onSuccess()
+      console.log('success sign in!')
       console.log(user)
     })
     .catch((error) => {
@@ -92,6 +93,5 @@ const create = async (user: User) => {
 export const get = (userId: string, set: (user: User) => void) => {
   onSnapshot(doc(db, 'users', userId), (doc) => {
     set(doc.data() as User)
-    console.log(doc.data())
   })
 }

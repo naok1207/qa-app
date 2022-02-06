@@ -1,19 +1,21 @@
-import { db, firebaseAuth } from '../firebase'
-import {
-  // collection,
-  doc,
-  onSnapshot,
-  setDoc,
-  // getDoc
-} from 'firebase/firestore'
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut as firebaseSignOut,
-} from 'firebase/auth'
+import { db } from '../firebase'
+import { collection, onSnapshot, query } from 'firebase/firestore'
 
 export type User = {
   id: string
   email: string
   name: string
+  admin?: number
+}
+
+export const getUsers = (onSuccess: (users: User[]) => void) => {
+  const q = query(collection(db, 'users'))
+
+  return onSnapshot(q, (querySnapShot) => {
+    const userDocs: User[] = []
+    querySnapShot.forEach((doc) => {
+      userDocs.push(doc.data() as User)
+    })
+    onSuccess(userDocs)
+  })
 }

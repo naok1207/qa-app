@@ -27,6 +27,9 @@ const Top = () => {
         <Link to="signOut" className="App-link">
           Go To signOut
         </Link>
+        <Link to="mypage" className="App-link">
+          Go To Mypage
+        </Link>
         <Outlet />
       </header>
     </div>

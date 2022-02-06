@@ -10,18 +10,20 @@ import Copyright from 'conponents/Copyright'
 import { useUserContext } from 'context/UserContext'
 import { useEffect } from 'react'
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useTitle } from 'conponents/BaseLayout'
 
 const theme = createTheme()
 
 const MyPage = () => {
+  useTitle('MY PAGE')
   const { currentUser } = useUserContext()
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!currentUser) navigate('/signIn')
-  }, [navigate, currentUser])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser])
 
   if (!currentUser) return <></>
 
@@ -49,12 +51,14 @@ const MyPage = () => {
               <Box sx={{ textAlign: 'center', m: 1 }}>{currentUser.email}</Box>
             </Typography>
             <Box sx={{ mt: 3 }}>
-              <Grid container justifyContent="center">
-                <Grid item>
-                  <Link href="/signout" variant="body2">
-                    go to out
-                  </Link>
-                </Grid>
+              <Grid
+                container
+                justifyContent="center"
+                flexDirection="column"
+                textAlign="center"
+              >
+                <Link to="/signout">go to out</Link>
+                <Link to="/admin">管理者ページ</Link>
               </Grid>
             </Box>
           </Box>

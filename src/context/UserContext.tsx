@@ -1,4 +1,5 @@
 import { firebaseAuth } from '../firebase'
+import { User as AuthUser, onAuthStateChanged } from 'firebase/auth'
 import useAuth, { AuthActions } from 'hooks/useAuth'
 import { createContext, useState, useContext, useEffect } from 'react'
 
@@ -25,23 +26,18 @@ export const UserProvider = ({ children }: Props) => {
   const value = { currentUser, authActions }
 
   useEffect(() => {
-    console.log('a-1')
-  }, [])
-
-  useEffect(() => {
-    console.log('a-2')
-    const userAuth = firebaseAuth.currentUser
-    console.log('userContext UserAuth: ', userAuth)
-    if (!userAuth) {
-      setCurrentUser(null)
-      setLoading(false)
-    } else {
-      const unsubscribed = get(userAuth.uid, (user) => {
-        setCurrentUser(user)
+    onAuthStateChanged(firebaseAuth, (userAuth) => {
+      if (!userAuth) {
+        setCurrentUser(null)
         setLoading(false)
-      })
-      return unsubscribed
-    }
+      } else {
+        const unsubscribed = get(userAuth.uid, (user) => {
+          setCurrentUser(user)
+          setLoading(false)
+        })
+        return unsubscribed
+      }
+    })
   }, [authStatus])
 
   return (

@@ -68,3 +68,6 @@ const Layout = () => {
   );
 }
 ```
+
+親コンポーネントの値を子コンポーネントから操作する
+https://reactrouter.com/docs/en/v6/api#useoutletcontext
