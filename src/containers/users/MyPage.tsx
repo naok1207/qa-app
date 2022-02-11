@@ -39,7 +39,16 @@ const MyPage = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar
+            sx={{
+              mb: 2,
+              width: 100,
+              height: 100,
+              objectFit: 'cover',
+              bgcolor: 'secondary.main',
+            }}
+            src={currentUser.avatar}
+          >
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -59,6 +68,7 @@ const MyPage = () => {
               >
                 <Link to="/signout">go to out</Link>
                 <Link to="/admin">管理者ページ</Link>
+                <Link to="/users/edit">ユーザ情報編集</Link>
               </Grid>
             </Box>
           </Box>
