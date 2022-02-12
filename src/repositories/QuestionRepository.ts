@@ -2,9 +2,13 @@ import { db } from '../firebase'
 import {
   addDoc,
   collection,
+  doc,
+  DocumentData,
+  getDoc,
   getDocs,
   orderBy,
   query,
+  QueryDocumentSnapshot,
   Timestamp,
 } from 'firebase/firestore'
 import { User } from 'repositories/UserRepository'
@@ -44,14 +48,23 @@ export const gets = async () => {
   const q = query(questionsRef, orderBy('createdAt', 'desc'))
   const querySnapshot = await getDocs(q)
   if (!querySnapshot.docs.length) return []
-  return querySnapshot.docs.map((doc) => {
-    const { title, content, userId, createdAt } = doc.data() as QuestionGetDoc
-    return {
-      id: doc.id,
-      title,
-      content,
-      userId,
-      createdAt: createdAt.toDate(),
-    } as Question
-  })
+  return querySnapshot.docs.map((doc) => format(doc))
+}
+
+export const get = async (questionId: string) => {
+  const ref = doc(db, 'questions', questionId)
+  const snapshot = await getDoc(ref)
+  if (!snapshot.exists()) return
+  return format(snapshot)
+}
+
+const format = (doc: QueryDocumentSnapshot<DocumentData>): Question => {
+  const { title, content, userId, createdAt } = doc.data() as QuestionGetDoc
+  return {
+    id: doc.id,
+    title,
+    content,
+    userId,
+    createdAt: createdAt.toDate(),
+  } as Question
 }

@@ -11,6 +11,7 @@ import BaseLayout from 'conponents/BaseLayout'
 import UsersEdit from 'containers/users/UsersEdit'
 import QAIndex from 'containers/QA/QAIndex'
 import QAForm from 'containers/QA/Questions/QAForm'
+import QuestionShow from 'containers/QA/Questions/QuestionShow'
 
 const Router = () => (
   <BrowserRouter>
@@ -29,6 +30,7 @@ const Router = () => (
         <Route path="qa" element={<QA />}>
           <Route index element={<QAIndex />} />
           <Route path="new" element={<QAForm />} />
+          <Route path=":questionId" element={<QuestionShow />} />
         </Route>
       </Route>
     </Routes>

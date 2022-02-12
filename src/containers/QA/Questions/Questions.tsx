@@ -8,10 +8,11 @@ import {
 } from '@mui/material'
 import dateFormat from 'dateformat'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { gets, Question } from 'repositories/QuestionRepository'
 
 const QuestionItem = ({ question }: { question: Question }) => (
-  <ListItem key={question.id} alignItems="flex-start">
+  <ListItem alignItems="flex-start" component={Link} to={`/qa/${question.id}`}>
     <ListItemText
       primary={
         <Box sx={{ display: 'flex' }}>
