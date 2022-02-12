@@ -8,9 +8,11 @@ import Container from '@mui/material/Container'
 import TextField from '@mui/material/TextField'
 import { create, QuestionDoc } from 'repositories/QuestionRepository'
 import { useUserContext } from 'context/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const QAForm = () => {
   const { currentUser } = useUserContext()
+  const navigate = useNavigate()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -20,6 +22,7 @@ const QAForm = () => {
     console.log(title, content)
     if (!currentUser || !title || !content) return
     create(currentUser, { title, content } as QuestionDoc)
+    navigate('/qa')
   }
 
   return (
