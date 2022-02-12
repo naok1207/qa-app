@@ -59,7 +59,7 @@ export const mainListItems = (
       <DashboardIcon />
     </LinkListItem>
     <LinkListItem to="/mypage" title="mypage" />
-    <LinkListItem to="/QA" title="QA" />
+    <LinkListItem to="/qa" title="QA" />
   </div>
 )
 

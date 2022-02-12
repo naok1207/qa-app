@@ -9,6 +9,8 @@ import Admin from 'containers/admin/Admin'
 import QA from 'containers/QA/QA'
 import BaseLayout from 'conponents/BaseLayout'
 import UsersEdit from 'containers/users/UsersEdit'
+import QAIndex from 'containers/QA/QAIndex'
+import QAForm from 'containers/QA/Questions/QAForm'
 
 const Router = () => (
   <BrowserRouter>
@@ -24,7 +26,10 @@ const Router = () => (
           <Route path="edit" element={<UsersEdit />} />
         </Route>
         <Route path="admin" element={<Admin />} />
-        <Route path="qa" element={<QA />} />
+        <Route path="qa" element={<QA />}>
+          <Route index element={<QAIndex />} />
+          <Route path="new" element={<QAForm />} />
+        </Route>
       </Route>
     </Routes>
   </BrowserRouter>
