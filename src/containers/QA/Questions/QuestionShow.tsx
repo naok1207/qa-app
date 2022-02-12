@@ -4,23 +4,24 @@ import Box from '@mui/system/Box'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { get, Question } from 'repositories/QuestionRepository'
+import Answers from './Answers'
+import NewAnswer from './NewAnswer'
 
 const QuestionShow = () => {
   const { questionId } = useParams()
   const [question, setQuestion] = useState<Question>()
 
   useEffect(() => {
+    if (!questionId) return
+    const setUpQuestion = async () => {
+      if (!questionId) return
+      const doc = await get(questionId)
+      setQuestion(doc)
+    }
     setUpQuestion()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionId])
 
-  const setUpQuestion = async () => {
-    if (!questionId) return
-    const doc = await get(questionId)
-    setQuestion(doc)
-  }
-
-  if (!question) return <></>
+  if (!questionId || !question) return <></>
 
   return (
     <Container
@@ -29,7 +30,7 @@ const QuestionShow = () => {
       sx={{ backgroundColor: 'background.paper' }}
     >
       <CssBaseline />
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, backgroundColor: 'background.paper' }}>
         <Typography variant="h4" component="h3">
           {question.title}
         </Typography>
@@ -38,6 +39,8 @@ const QuestionShow = () => {
           {question.content}
         </Typography>
       </Box>
+      <Answers questionId={questionId} />
+      <NewAnswer questionId={questionId} />
     </Container>
   )
 }
