@@ -49,10 +49,10 @@ const Questions = () => {
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {questions.map((question, index) => (
-        <>
-          <QuestionItem key={question.id} question={question} />
+        <Box key={question.id}>
+          <QuestionItem question={question} />
           {questions.length - 1 !== index && <Divider variant="middle" />}
-        </>
+        </Box>
       ))}
     </List>
   )

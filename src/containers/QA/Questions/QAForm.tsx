@@ -19,7 +19,6 @@ const QAForm = () => {
     const data = new FormData(event.currentTarget)
     const title = data.get('title')?.toString()
     const content = data.get('content')?.toString()
-    console.log(title, content)
     if (!currentUser || !title || !content) return
     create(currentUser, { title, content } as QuestionDoc)
     navigate('/qa')

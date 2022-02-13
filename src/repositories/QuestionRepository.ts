@@ -2,14 +2,17 @@ import { db } from '../firebase'
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   DocumentData,
   getDoc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
   QueryDocumentSnapshot,
   Timestamp,
+  where,
 } from 'firebase/firestore'
 import { User } from 'repositories/UserRepository'
 
@@ -42,6 +45,28 @@ export const create = async (user: User, questionDoc: QuestionDoc) => {
     createdAt: Timestamp.fromDate(new Date()),
   }
   await addDoc(collection(db, 'questions'), docData)
+}
+
+export const deleteQuestion = async (userId: string, questionId: string) => {
+  const question = await get(questionId)
+  if (!question || question.userId !== userId) return
+  await deleteDoc(doc(db, 'questions', questionId))
+}
+
+export const observeOwn = (
+  userId: string,
+  onProcess: (questions: Question[]) => void,
+) => {
+  const q = query(
+    questionsRef,
+    orderBy('createdAt', 'desc'),
+    where('userId', '==', userId),
+  )
+  return onSnapshot(q, (snapshot) => {
+    if (!snapshot.docs.length) return
+    const questions = snapshot.docs.map((doc) => format(doc))
+    onProcess(questions)
+  })
 }
 
 export const gets = async () => {
