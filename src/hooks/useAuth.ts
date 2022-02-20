@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { verifyEmail } from './../repositories/AuthRepository'
+import { useEffect, useState } from 'react'
 import {
   SignInUser,
   SignUpUser,
@@ -7,36 +8,48 @@ import {
   deleteSession,
 } from 'repositories/AuthRepository'
 
-export type AuthStatus = 'Loading' | 'SignedIn' | 'SignedOut'
+export type AuthStatus = 'Loading' | 'SignedIn' | 'Verifying'
 
 export type AuthActions = {
+  setAuthStatus: React.Dispatch<React.SetStateAction<AuthStatus>>
   signIn: (user: SignInUser) => void
   signUp: (user: SignUpUser) => void
+  verify: () => void
   signOut: () => void
 }
 
 const useAuth = (): [AuthStatus, AuthActions] => {
   const [authStatus, setAuthStatus] = useState<AuthStatus>('Loading')
 
+  useEffect(() => {
+    console.log('authStatus Changed: ', authStatus)
+  }, [authStatus])
+
   const signIn = (user: SignInUser) => {
-    createSession(user, () => {
-      setAuthStatus('SignedIn')
+    createSession(user, (isVerified: boolean) => {
+      setAuthStatus(isVerified ? 'SignedIn' : 'Verifying')
     })
   }
 
-  const signUp = (user: SignUpUser) => {
-    createUser(user, () => {
+  const signUp = async (user: SignUpUser) => {
+    await createUser(user, () => {
+      setAuthStatus('Verifying')
+    })
+  }
+
+  const verify = () => {
+    verifyEmail(() => {
       setAuthStatus('SignedIn')
     })
   }
 
   const signOut = () => {
     deleteSession(() => {
-      setAuthStatus('SignedOut')
+      setAuthStatus('Loading')
     })
   }
 
-  return [authStatus, { signIn, signUp, signOut }]
+  return [authStatus, { setAuthStatus, signIn, signUp, verify, signOut }]
 }
 
 export default useAuth

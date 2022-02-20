@@ -8,6 +8,7 @@ import {
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from 'firebase/auth'
@@ -34,7 +35,7 @@ export type AuthActions = {
   deleteSession: (onSuccess: () => void) => void
 }
 
-export const createUser = (user: SignUpUser, onSuccess: () => void) => {
+export const createUser = async (user: SignUpUser, onSuccess: () => void) => {
   createUserWithEmailAndPassword(firebaseAuth, user.email, user.password)
     .then((userCredential) => {
       console.log('success', userCredential)
@@ -43,7 +44,10 @@ export const createUser = (user: SignUpUser, onSuccess: () => void) => {
         name: user.name,
         email: user.email,
       } as User)
-      onSuccess()
+      if (!firebaseAuth.currentUser) return
+      sendEmailVerification(firebaseAuth.currentUser).then(() => {
+        onSuccess()
+      })
     })
     .catch((error) => {
       const errorCode = error.code
@@ -53,13 +57,19 @@ export const createUser = (user: SignUpUser, onSuccess: () => void) => {
 }
 
 // 新規会員登録
-export const createSession = (user: SignInUser, onSuccess: () => void) => {
+export const createSession = (
+  user: SignInUser,
+  onSuccess: (isVerified: boolean) => void,
+) => {
   console.log(user)
   // signInWithEmailAndPassword(firebaseAuth, 'test@example.com', 'hogehoge')
   signInWithEmailAndPassword(firebaseAuth, user.email, user.password)
     .then((userCredential) => {
       const user = userCredential.user
-      onSuccess()
+      if (!user.emailVerified && firebaseAuth.currentUser) {
+        sendEmailVerification(firebaseAuth.currentUser)
+      }
+      onSuccess(user.emailVerified)
       console.log('success sign in!')
       console.log(user)
     })
@@ -68,6 +78,23 @@ export const createSession = (user: SignInUser, onSuccess: () => void) => {
       const errorMessage = error.message
       console.log(errorCode, errorMessage)
     })
+}
+
+export const verifyEmail = (onSuccess: () => void) => {
+  let timer = 30000
+  const interval = setInterval(() => {
+    firebaseAuth.currentUser?.reload().then((ok) => {
+      console.log('interval')
+      if (firebaseAuth.currentUser?.emailVerified) {
+        onSuccess()
+        clearInterval(interval)
+      }
+      if (timer <= 0) {
+        clearInterval(interval)
+      }
+      timer -= 1000
+    })
+  }, 1000)
 }
 
 export const deleteSession = (onSuccess: () => void) => {

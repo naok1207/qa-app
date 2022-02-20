@@ -10,21 +10,20 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Copyright from 'conponents/Copyright'
-import useAuth from 'hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { useUserContext } from 'context/UserContext'
 
 const theme = createTheme()
 
 const SignOut = () => {
-  const { currentUser, authActions } = useUserContext()
+  const { authStatus, authActions } = useUserContext()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (currentUser) return
-    navigate('/signIn')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser])
+    if (authStatus === 'Loading') {
+      navigate('/signIn')
+    }
+  }, [authStatus, navigate])
 
   const handlePressSignOut = () => {
     authActions?.signOut()

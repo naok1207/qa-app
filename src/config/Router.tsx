@@ -12,6 +12,7 @@ import UsersEdit from 'containers/users/UsersEdit'
 import QAIndex from 'containers/QA/QAIndex'
 import QAForm from 'containers/QA/Questions/QAForm'
 import QuestionShow from 'containers/QA/Questions/QuestionShow'
+import Verification from 'containers/auth/Verification'
 
 const Router = () => (
   <BrowserRouter>
@@ -21,6 +22,7 @@ const Router = () => (
       <Route path="signIn" element={<SignIn />} />
       <Route path="signOut" element={<SignOut />} />
       <Route path="signUp" element={<SignUp />} />
+      <Route path="verification" element={<Verification />} />
       <Route element={<BaseLayout />}>
         <Route path="mypage" element={<MyPage />} />
         <Route path="users">

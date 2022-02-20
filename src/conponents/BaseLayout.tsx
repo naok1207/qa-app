@@ -18,7 +18,13 @@ import {
   mainListItems,
   secondaryListItems,
 } from 'containers/BaseLayer/listItems'
-import { Outlet, useOutletContext } from 'react-router-dom'
+import {
+  Navigate,
+  Outlet,
+  useNavigate,
+  useOutletContext,
+} from 'react-router-dom'
+import { useUserContext } from 'context/UserContext'
 const drawerWidth: number = 240
 
 interface AppBarProps extends MuiAppBarProps {
@@ -76,9 +82,18 @@ type ContextType = { setTitle: React.Dispatch<React.SetStateAction<string>> }
 const BaseLayout = () => {
   const [open, setOpen] = React.useState(true)
   const [title, setTitle] = React.useState('MY APP')
+  const { authStatus } = useUserContext()
+  const navigate = useNavigate()
   const toggleDrawer = () => {
     setOpen(!open)
   }
+
+  React.useEffect(() => {
+    if (!authStatus || authStatus === 'SignedIn') return
+    navigate('signIn')
+  }, [authStatus, navigate])
+
+  if (!authStatus) return <></>
 
   return (
     <ThemeProvider theme={mdTheme}>

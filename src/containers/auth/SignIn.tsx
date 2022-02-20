@@ -16,25 +16,26 @@ import Copyright from 'conponents/Copyright'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserContext } from 'context/UserContext'
-import { firebaseAuth } from '../../firebase'
 
 const theme = createTheme()
 
 export default function SignIn() {
-  const { currentUser, authActions } = useUserContext()
+  const { authStatus, authActions } = useUserContext()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (currentUser) {
-      navigate('/mypage')
+    switch (authStatus) {
+      case 'Verifying':
+        navigate('/verification')
+        break
+      case 'SignedIn':
+        navigate('/mypage')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser])
+  }, [authStatus, navigate])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    // eslint-disable-next-line no-console
     console.log({
       email: data.get('email'),
       password: data.get('password'),
@@ -44,6 +45,8 @@ export default function SignIn() {
     if (!email || !password) return
     authActions?.signIn({ email, password })
   }
+
+  if (!authStatus) return <></>
 
   return (
     <ThemeProvider theme={theme}>

@@ -15,18 +15,19 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Copyright from 'conponents/Copyright'
 import { useNavigate } from 'react-router-dom'
 import { useUserContext } from 'context/UserContext'
+import { useEffect } from 'react'
 
 const theme = createTheme()
 
 const SignUp = () => {
-  const { currentUser, authActions } = useUserContext()
+  const { authStatus, authActions } = useUserContext()
   const navigate = useNavigate()
 
-  React.useEffect(() => {
-    if (!currentUser) return
-    navigate('/mypage')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser])
+  useEffect(() => {
+    if (authStatus === 'Verifying') {
+      navigate('/verification')
+    }
+  }, [authStatus, navigate])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
