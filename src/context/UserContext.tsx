@@ -34,6 +34,8 @@ export const UserProvider = ({ children }: Props) => {
       if (!userAuth) {
         setCurrentUser(null)
         setLoading(false)
+      } else if (!userAuth.emailVerified) {
+        authActions.setAuthStatus('Verifying')
       } else {
         const unsubscribed = get(userAuth.uid, (user) => {
           setCurrentUser(user)
