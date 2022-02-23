@@ -60,12 +60,12 @@ const MyQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([])
 
   useEffect(() => {
-    if (!currentUser) return
+    if (!currentUser?.id) return
     const unsubscribe = observeOwn(currentUser.id, (snapshotQuestions) => {
       setQuestions(snapshotQuestions)
     })
     return unsubscribe
-  }, [currentUser])
+  }, [currentUser?.id])
 
   if (!currentUser) return <></>
 

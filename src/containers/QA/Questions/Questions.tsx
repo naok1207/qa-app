@@ -39,6 +39,9 @@ const Questions = () => {
 
   useEffect(() => {
     setUpQuestion()
+    return () => {
+      console.log('questions, unmounted')
+    }
   }, [])
 
   const setUpQuestion = async () => {

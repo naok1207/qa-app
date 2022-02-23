@@ -65,6 +65,7 @@ export const observeOwn = (
   return onSnapshot(q, (snapshot) => {
     if (!snapshot.docs.length) return
     const questions = snapshot.docs.map((doc) => format(doc))
+    console.log('questions', questions)
     onProcess(questions)
   })
 }
