@@ -18,12 +18,7 @@ import {
   mainListItems,
   secondaryListItems,
 } from 'containers/BaseLayer/listItems'
-import {
-  Navigate,
-  Outlet,
-  useNavigate,
-  useOutletContext,
-} from 'react-router-dom'
+import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
 import { useUserContext } from 'context/UserContext'
 const drawerWidth: number = 240
 
